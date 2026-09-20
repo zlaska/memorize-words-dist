@@ -2,12 +2,5 @@
   "note": "APK 超过 GitHub 单文件 100MB 上限，实体挂在 Releases 资产下，这里留清单。",
   "release_tag": "app-latest",
   "download_base": "https://github.com/zlaska/memorize-words-dist/releases/download/app-latest",
-  "apps": [
-    {
-      "file": "MemorizeWords-v0.87.0.apk",
-      "bytes": 316105723,
-      "sha256": "c9b8fcbee0bad3b912308918fea7cd082b14da6ba793aa324d452f2d7722b938",
-      "url": "https://github.com/zlaska/memorize-words-dist/releases/download/app-latest/MemorizeWords-v0.87.0.apk"
-    }
-  ]
+  "apps": []
 }
