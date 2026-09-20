@@ -4,10 +4,10 @@
   "download_base": "https://github.com/zlaska/memorize-words-dist/releases/download/app-latest",
   "apps": [
     {
-      "file": "MemorizeWords-v0.86.0.apk",
-      "bytes": 299974069,
-      "sha256": "0415795d3468808302fa3fe1536bdc1378554f44dfda041449a3e3c383c406f1",
-      "url": "https://github.com/zlaska/memorize-words-dist/releases/download/app-latest/MemorizeWords-v0.86.0.apk"
+      "file": "MemorizeWords-v0.87.0.apk",
+      "bytes": 316105723,
+      "sha256": "c9b8fcbee0bad3b912308918fea7cd082b14da6ba793aa324d452f2d7722b938",
+      "url": "https://github.com/zlaska/memorize-words-dist/releases/download/app-latest/MemorizeWords-v0.87.0.apk"
     }
   ]
 }
