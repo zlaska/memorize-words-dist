@@ -1,0 +1,55 @@
+name: Publish Android APK
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reassemble and verify APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          source_dir="uploads/${GITHUB_REF_NAME}"
+          output="${RUNNER_TEMP}/memorize-words-${version}.apk"
+
+          mapfile -t parts < <(find "$source_dir" -maxdepth 1 -type f -name '*.part*' | sort)
+          if [[ ${#parts[@]} -eq 0 ]]; then
+            echo "No APK parts found under $source_dir" >&2
+            exit 1
+          fi
+
+          cat "${parts[@]}" > "$output"
+          actual_sha256="$(sha256sum "$output" | awk '{print $1}')"
+          expected_sha256="05f0ed7291f710fdad305214746751c8842a201df94fddc0539f4f3d7ee28219"
+
+          if [[ "$actual_sha256" != "$expected_sha256" ]]; then
+            echo "APK SHA-256 mismatch: expected $expected_sha256, got $actual_sha256" >&2
+            exit 1
+          fi
+
+          echo "APK_SHA256=$actual_sha256" >> "$GITHUB_ENV"
+          echo "APK_PATH=$output" >> "$GITHUB_ENV"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$APK_PATH" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$APK_PATH" \
+              --title "Memorize Words ${GITHUB_REF_NAME#v}" \
+              --notes "Android APK ${GITHUB_REF_NAME#v} (versionCode 131). SHA-256: ${APK_SHA256}"
+          fi
